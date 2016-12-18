@@ -31,15 +31,15 @@ const router = express.Router();              // get an instance of the express 
 app.use(cors());    //allow api request from anywhere
 
 // middleware to use for all requests
-router.use(function(req, res, next) {
+router.use((req, res, next) => {
     // do logging
     console.log(`Processing ${req.method} for ${req.originalUrl}`);
     next(); // make sure we go to the next routes and don't stop here
 });
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-router.get('/', function(req, res) {
-    res.json({ message: 'Tunes api!' });   
+router.get('/', (req, res) => {
+    res.json({ message: 'Tunes api!' });
 });
 
 // more routes for our API will happen here
@@ -49,11 +49,10 @@ router.get('/', function(req, res) {
 router.route('/songs')
 
     // get all the songs (accessed at GET http://localhost:8080/api/songs)
-    .get(function(req, res) {
-        Song.find(function(err, songs) {
+    .get((req, res) => {
+        Song.find((err, songs) => {
             if (err)
                 res.send(err);
-
             res.json(songs);
         });
     });
@@ -63,11 +62,10 @@ router.route('/songs')
 router.route('/artists')
 
     // get all the artist (accessed at GET http://localhost:8080/api/artists)
-    .get(function(req, res) {
+    .get((req, res) => {
         Song.distinct("Artist", function(err, songs) {
             if (err)
                 res.send(err);
-
             songs.sort(sortAlpha);
             res.json(songs);
         });
@@ -78,11 +76,10 @@ router.route('/artists')
 router.route('/albums')
 
     // get all the artist (accessed at GET http://localhost:8080/api/albums)
-    .get(function(req, res) {
+    .get((req, res) => {
         Song.distinct("Album", function(err, songs) {
             if (err)
                 res.send(err);
-
             songs.sort(sortAlpha);
             res.json(songs);
         });
@@ -92,8 +89,9 @@ router.route('/albums')
  // ----------------------------------------------------
 router.route('/songs/name/:Name')
 
-    .get(function(req, res) {
-        Song.find({Name: new RegExp(req.params.Name, "i")}, function(err, song) {
+    // get the songs that match name (accessed at GET http://localhost:8080/api/songs/name:name)
+    .get((req, res) => {
+        Song.find({Name: new RegExp(req.params.Name, "i")}, (err, song) => {
             if (err)
                 res.send(err);
             res.json(song);
@@ -105,8 +103,9 @@ router.route('/songs/name/:Name')
  // ----------------------------------------------------
 router.route('/songs/artist/:Artist')
 
-    .get(function(req, res) {
-        Song.find({Artist: new RegExp(req.params.Artist, "i")}, function(err, song) {
+    // get the artist that match artist (accessed at GET http://localhost:8080/api/songs/artist:artist)
+    .get((req, res) => {
+        Song.find({Artist: new RegExp(req.params.Artist, "i")}, (err, song) => {
             if (err)
                 res.send(err);
             res.json(song);
@@ -122,7 +121,7 @@ app.use('/api', router);
 app.listen(port);
 console.log('Running on port ' + port);
 
-var sortAlpha = function(x,y){
+var sortAlpha = (x,y) => {
     var a = String(x).toUpperCase();
     var b = String(y).toUpperCase();
     if (a > b)
@@ -133,5 +132,3 @@ var sortAlpha = function(x,y){
 };
 
 module.exports = app;
-
-
