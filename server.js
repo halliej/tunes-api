@@ -66,7 +66,7 @@ router.route('/artists')
     // get all the artist (accessed at GET http://localhost:8080/api/artists)
     .get((req, res) => {
         console.time('get all artists');
-        Song.distinct("Artist", function(err, songs) {
+        Song.distinct("Artist", (err, songs) => {
             if (err)
                 res.send(err);
             songs.sort(sortAlpha);
@@ -82,7 +82,7 @@ router.route('/albums')
     // get all the albums (accessed at GET http://localhost:8080/api/albums)
     .get((req, res) => {
         console.time('get all albums');
-        Song.distinct("Album", function(err, songs) {
+        Song.distinct("Album", (err, songs) => {
             if (err)
                 res.send(err);
             songs.sort(sortAlpha);
