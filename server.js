@@ -50,11 +50,13 @@ router.route('/songs')
 
     // get all the songs (accessed at GET http://localhost:8080/api/songs)
     .get((req, res) => {
+        console.time('get all songs');
         Song.find((err, songs) => {
             if (err)
                 res.send(err);
             res.json(songs);
         });
+        console.timeEnd('get all songs');
     });
 
 // on routes that end in /artists
@@ -63,26 +65,30 @@ router.route('/artists')
 
     // get all the artist (accessed at GET http://localhost:8080/api/artists)
     .get((req, res) => {
+        console.time('get all artists');
         Song.distinct("Artist", function(err, songs) {
             if (err)
                 res.send(err);
             songs.sort(sortAlpha);
             res.json(songs);
         });
+        console.timeEnd('get all artists');
     });
 
 // on routes that end in /albums
 // ----------------------------------------------------
 router.route('/albums')
 
-    // get all the artist (accessed at GET http://localhost:8080/api/albums)
+    // get all the albums (accessed at GET http://localhost:8080/api/albums)
     .get((req, res) => {
+        console.time('get all albums');
         Song.distinct("Album", function(err, songs) {
             if (err)
                 res.send(err);
             songs.sort(sortAlpha);
             res.json(songs);
         });
+        console.timeEnd('get all albums');
     });
 
  // on routes that end in /songs/name/:Name
@@ -91,11 +97,13 @@ router.route('/songs/name/:Name')
 
     // get the songs that match name (accessed at GET http://localhost:8080/api/songs/name:name)
     .get((req, res) => {
+        console.time('get songs by name');
         Song.find({Name: new RegExp(req.params.Name, "i")}, (err, song) => {
             if (err)
                 res.send(err);
             res.json(song);
         });
+        console.timeEnd('get songs by name');
     });
 
 
@@ -103,13 +111,15 @@ router.route('/songs/name/:Name')
  // ----------------------------------------------------
 router.route('/songs/artist/:Artist')
 
-    // get the artist that match artist (accessed at GET http://localhost:8080/api/songs/artist:artist)
+    // get the songs by that match artist (accessed at GET http://localhost:8080/api/songs/artist:artist)
     .get((req, res) => {
+        console.time('get songs by artist');
         Song.find({Artist: new RegExp(req.params.Artist, "i")}, (err, song) => {
             if (err)
                 res.send(err);
             res.json(song);
         });
+        console.timeEnd('get songs by artist');
     });
 
 // REGISTER OUR ROUTES -------------------------------
