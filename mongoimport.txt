@@ -1,0 +1,1 @@
+mongoimport -d tunes -c songs --file iTunes81316.csv --type csv --headerline
