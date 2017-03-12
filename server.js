@@ -3,9 +3,10 @@
 // =============================================================================
 
 // call the packages we need
-const express    = require('express');        // call express
-const cors       = require('cors');
-const app        = express();                 // define our app using express
+const express = require('express');        // call express
+const cors = require('cors');
+
+const app = express();                 // define our app using express
 const bodyParser = require('body-parser');
 
 // configure app to use bodyParser()
@@ -15,14 +16,15 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 8080;        // set our port
 
-const mongoose   = require('mongoose');
+const mongoose = require('mongoose');
+
 mongoose.connect('mongodb://localhost:27017/tunes');
 
 mongoose.connection.on('error', () => {
   console.error('MongoDB Connection Error. Please make sure MongoDB is running.');
 });
 
-const Song     = require('./models/songs');
+const Song = require('./models/songs');
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -52,8 +54,9 @@ router.route('/songs')
     .get((req, res) => {
         console.time('get all songs');
         Song.find((err, songs) => {
-            if (err)
+            if (err) {
                 res.send(err);
+            }
             res.json(songs);
         });
         console.timeEnd('get all songs');
@@ -66,9 +69,10 @@ router.route('/artists')
     // get all the artist (accessed at GET http://localhost:8080/api/artists)
     .get((req, res) => {
         console.time('get all artists');
-        Song.distinct("Artist", (err, songs) => {
-            if (err)
+        Song.distinct('Artist', (err, songs) => {
+            if (err) {
                 res.send(err);
+            }
             songs.sort(sortAlpha);
             res.json(songs);
         });
@@ -82,9 +86,10 @@ router.route('/albums')
     // get all the albums (accessed at GET http://localhost:8080/api/albums)
     .get((req, res) => {
         console.time('get all albums');
-        Song.distinct("Album", (err, songs) => {
-            if (err)
+        Song.distinct('Album', (err, songs) => {
+            if (err) {
                 res.send(err);
+            }
             songs.sort(sortAlpha);
             res.json(songs);
         });
@@ -98,9 +103,10 @@ router.route('/songs/name/:Name')
     // get the songs that match name (accessed at GET http://localhost:8080/api/songs/name:name)
     .get((req, res) => {
         console.time('get songs by name');
-        Song.find({Name: new RegExp(req.params.Name, "i")}, (err, song) => {
-            if (err)
+        Song.find({ Name: new RegExp(req.params.Name, 'i') }, (err, song) => {
+            if (err) {
                 res.send(err);
+            }
             res.json(song);
         });
         console.timeEnd('get songs by name');
@@ -114,9 +120,10 @@ router.route('/songs/artist/:Artist')
     // get the songs by that match artist (accessed at GET http://localhost:8080/api/songs/artist:artist)
     .get((req, res) => {
         console.time('get songs by artist');
-        Song.find({Artist: new RegExp(req.params.Artist, "i")}, (err, song) => {
-            if (err)
+        Song.find({ Artist: new RegExp(req.params.Artist, 'i') }, (err, song) => {
+            if (err) {
                 res.send(err);
+            }
             res.json(song);
         });
         console.timeEnd('get songs by artist');
@@ -129,15 +136,17 @@ app.use('/api', router);
 // START THE SERVER
 // =============================================================================
 app.listen(port);
-console.log('Running on port ' + port);
+console.log(`Running on port ${port}`);
 
-var sortAlpha = (x,y) => {
-    var a = String(x).toUpperCase();
-    var b = String(y).toUpperCase();
-    if (a > b)
+const sortAlpha = (x, y) => {
+    const a = String(x).toUpperCase();
+    const b = String(y).toUpperCase();
+    if (a > b) {
         return 1;
-    if (a < b)
+    }
+    if (a < b) {
         return -1;
+    }
     return 0;
 };
 
